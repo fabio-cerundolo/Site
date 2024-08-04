@@ -1,0 +1,98 @@
+import React, { useState, useEffect } from 'react';
+import { Github, Linkedin, Mail, Phone } from 'lucide-react';
+
+const skills = {
+  'Programming Languages': ['Java', 'Python', 'JavaScript'],
+  'Web Technologies': ['HTML', 'CSS'],
+  'Databases': ['SQL', 'Oracle', 'MySQL'],
+  'Software': ['Office Suite'],
+  'Soft Skills': ['Problem Solving', 'Teamwork', 'Analytical Thinking', 'Adaptability', 'Operational Autonomy']
+};
+
+const education = [
+  {
+    title: 'ATTESTATO TEST AUTOMATION JUNIT',
+    institution: 'Formazione Lavoro- Corso di informazione ISCS',
+    date: '25/09/2023 – 21/12/2023'
+  },
+  {
+    title: 'ATTESTATO PPDB & SISTEMI AZIENDALI',
+    institution: 'Assocam Camerana',
+    date: '07/04/2023 – 06/06/2023'
+  },
+  {
+    title: 'DIPLOMA TECNICO INFORMATICO DELLE TELECOMUNICAZIONI',
+    institution: 'ITIS Amadeo Avogadro',
+    date: '11/09/2017 – 26/07/2020'
+  }
+];
+
+const CodeTerminalPortfolio = () => {
+  const [output, setOutput] = useState([]);
+  const [currentCommand, setCurrentCommand] = useState('');
+
+  const commands = {
+    help: "Available commands: about, skills, education, contact, clear",
+    about: "Fabio Cerundolo - Technical Informatics & Telecommunications\n\nI'm a curious individual with a passion for science and technology. I enjoy programming, learning new languages, and staying updated with the latest tech trends. In my free time, I love reading fantasy, sci-fi, and horror books, as well as scientific articles. I'm also interested in video games both for entertainment and from a technical perspective.",
+    skills: Object.entries(skills).map(([category, items]) => `${category}:\n${items.join(', ')}`).join('\n\n'),
+    education: education.map(edu => `${edu.title}\n${edu.institution}\n${edu.date}`).join('\n\n'),
+    contact: "Email: cerundolo.fabio@gmail.com\nPhone: +39 3348399328\nGitHub: [Your GitHub]\nLinkedIn: [Your LinkedIn]",
+    clear: "clear"
+  };
+
+  const handleCommand = (cmd) => {
+    const trimmedCmd = cmd.trim().toLowerCase();
+    if (trimmedCmd === 'clear') {
+      setOutput([]);
+    } else if (commands[trimmedCmd]) {
+      setOutput(prev => [...prev, `> ${cmd}`, commands[trimmedCmd]]);
+    } else {
+      setOutput(prev => [...prev, `> ${cmd}`, 'Command not found. Type "help" for available commands.']);
+    }
+    setCurrentCommand('');
+  };
+
+  useEffect(() => {
+    setOutput(["Welcome to Fabio Cerundolo's portfolio terminal.", 'Type "help" for available commands.']);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-green-500 p-4 font-mono">
+      <div className="mb-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Fabio Cerundolo's Portfolio</h1>
+        <div className="flex space-x-4">
+          <a href="mailto:cerundolo.fabio@gmail.com" className="hover:text-green-300 transition-colors duration-300">
+            <Mail size={20} />
+          </a>
+          <a href="tel:+393348399328" className="hover:text-green-300 transition-colors duration-300">
+            <Phone size={20} />
+          </a>
+          <a href="#" className="hover:text-green-300 transition-colors duration-300">
+            <Github size={20} />
+          </a>
+          <a href="#" className="hover:text-green-300 transition-colors duration-300">
+            <Linkedin size={20} />
+          </a>
+        </div>
+      </div>
+      <div className="bg-gray-900 p-4 rounded-lg shadow-lg h-[80vh] overflow-y-auto">
+        {output.map((line, index) => (
+          <pre key={index} className="mb-2 whitespace-pre-wrap">{line}</pre>
+        ))}
+        <div className="flex items-center">
+          <span className="mr-2">$</span>
+          <input
+            type="text"
+            value={currentCommand}
+            onChange={(e) => setCurrentCommand(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleCommand(currentCommand)}
+            className="bg-transparent border-none outline-none flex-grow text-green-500"
+            autoFocus
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CodeTerminalPortfolio;
